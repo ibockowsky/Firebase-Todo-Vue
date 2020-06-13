@@ -33,9 +33,9 @@
           <button
             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
-            @click.prevent="login"
+            @click.prevent="register"
           >
-            Sign In
+            Register
           </button>
         </div>
       </form>
@@ -45,7 +45,6 @@
 
 <script>
 export default {
-  name: 'Home',
   data() {
     return {
       form: {
@@ -55,9 +54,11 @@ export default {
     }
   },
   methods: {
-    login() {
-      this.$store.dispatch('LOGIN', this.form)
+    register() {
+      this.$store.dispatch('REGISTER', this.form)
     }
   }
 }
 </script>
+
+<style lang="scss" scoped></style>
