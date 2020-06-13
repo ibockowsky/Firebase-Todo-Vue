@@ -14,7 +14,8 @@ fb.auth.onAuthStateChanged(user => {
 export const store = new Vuex.Store({
   state: {
     currentUser: null,
-    errorMessages: []
+    errorMessages: [],
+    todos: []
   },
   mutations: {
     SET_USER(state, user) {
@@ -33,6 +34,18 @@ export const store = new Vuex.Store({
     },
     CLEAR_ERRORS(state) {
       state.errorMessages = []
+    },
+    ADD_TODO(state, todo) {
+      state.todos.push(todo)
+    },
+    SET_TODOS(state, todos) {
+      state.todos = todos
+    },
+    DELETE_TODO(state, id) {
+      const index = state.todos.findIndex(item => item.id == id)
+      if (index >= 0) {
+        state.todos.splice(index, 1)
+      }
     }
   },
   actions: {
@@ -67,6 +80,62 @@ export const store = new Vuex.Store({
         })
         .catch(err => {
           console.log(err)
+        })
+    },
+    ADD_TODO({ commit, state, dispatch }, todo) {
+      const uid = state.currentUser.uid
+      fb.db
+        .collection('todo')
+        .add({
+          content: todo,
+          created_at: new Date(),
+          completed: false,
+          uid: uid
+        })
+        .then(docRef => {
+          commit('ADD_TODO', {
+            id: docRef.id,
+            content: todo,
+            completed: false
+          })
+        })
+        .catch(err => {
+          dispatch('ERROR_HANDLER', err)
+        })
+    },
+    GET_TODOS({ commit, dispatch, state }) {
+      const uid = state.currentUser.uid
+      fb.db
+        .collection('todo')
+        .where('uid', '==', uid)
+        .get()
+        .then(querySnapshot => {
+          let tempArray = []
+          querySnapshot.forEach(doc => {
+            tempArray.push({
+              id: doc.id,
+              content: doc.data().content,
+              created_at: doc.data().created_at,
+              completed: doc.data().completed
+            })
+          })
+          const arraySorted = tempArray.sort((a, b) => {
+            return a.created_at.seconds - b.created_at.seconds
+          })
+          commit('SET_TODOS', arraySorted)
+        })
+        .catch(err => {
+          dispatch('ERROR_HANDLER', err)
+        })
+    },
+    DELETE_TODO({ commit, dispatch }, todo) {
+      fb.db
+        .collection('todo')
+        .doc(todo.id)
+        .delete()
+        .then(() => commit('DELETE_TODO', todo.id))
+        .catch(err => {
+          dispatch('ERROR_HANDLER', err)
         })
     },
     ERROR_HANDLER({ commit }, error) {
