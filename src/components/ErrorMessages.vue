@@ -1,17 +1,19 @@
 <template>
   <div>
     <transition-group name="slide-up" tag="ul" appear>
-      <li v-for="error in errors" :key="error">
-        <span class="text-xs text-red-400 py-1 ">
-          {{ error }}
-        </span>
-      </li>
+      <div v-for="error in errors" :key="error">
+        <Alert :alert_data="error" />
+      </div>
     </transition-group>
   </div>
 </template>
 
 <script>
+import Alert from '@/components/Alert.vue'
 export default {
+  components: {
+    Alert
+  },
   props: {
     errors: {
       type: Array,

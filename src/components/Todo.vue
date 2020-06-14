@@ -1,10 +1,28 @@
 <template>
   <div class="flex">
     <div class="bg-white shadow m-1 p-3 text-left w-full">
-      <span class="font-sans font-bold subpixel-antialiased text-xl "
+      <input
+        type="checkbox"
+        v-model="todo.completed"
+        class="mr-2 leading-tight"
+        @change="editDoneTodo()"
+      />
+      <span
+        v-if="!editing"
+        class="font-sans font-bold subpixel-antialiased text-xl"
+        :class="{ completed: todo.completed }"
+        @dblclick="editTodo()"
         >{{ todo.content }}
       </span>
-
+      <input
+        v-else
+        type="text"
+        class="font-sans subpixel-antialiased text-xl border-b border-b-2 border-teal-500"
+        v-model="todo.content"
+        @blur="editDoneTodo()"
+        @keyup.enter="editDoneTodo()"
+        @keyup.esc="editExitTodo()"
+      />
       <button
         class="bg-red-300 hover:bg-red-400 text-red-800 font-bold p-2 rounded inline-flex items-center float-right"
         type="button"
@@ -23,20 +41,50 @@
 <script>
 export default {
   props: {
-    todo: {
+    todo_data: {
       type: Object,
       required: true
+    }
+  },
+  data() {
+    return {
+      todo: {
+        id: this.todo_data.id,
+        content: this.todo_data.content,
+        completed: this.todo_data.completed,
+        created_at: this.todo_data.created_at
+      },
+      editing: false
     }
   },
   methods: {
     deleteTodo(todo) {
       this.$store.dispatch('DELETE_TODO', todo)
+    },
+    editTodo() {
+      this.beforeEdit = this.content
+      this.editing = true
+    },
+    editDoneTodo() {
+      if (this.todo.content.trim == '') {
+        this.todo.content = this.beforeEdit
+      }
+      this.$store.dispatch('UPDATE_TODO', this.todo)
+      this.editing = false
+    },
+    editExitTodo() {
+      this.content = this.beforeEdit
+      this.editing = false
     }
   }
 }
 </script>
 
 <style scoped>
+.completed {
+  @apply text-gray-500;
+  @apply line-through;
+}
 .svg-icon {
   width: 1em;
   height: 1em;

@@ -46,6 +46,15 @@ export const store = new Vuex.Store({
       if (index >= 0) {
         state.todos.splice(index, 1)
       }
+    },
+    UPDATE_TODO(state, todo) {
+      const index = state.todos.findIndex(item => item.id == todo.id)
+      state.todos.splice(index, 1, {
+        id: todo.id,
+        content: todo.content,
+        created_at: todo.created_at,
+        completed: todo.completed
+      })
     }
   },
   actions: {
@@ -134,6 +143,24 @@ export const store = new Vuex.Store({
         .doc(todo.id)
         .delete()
         .then(() => commit('DELETE_TODO', todo.id))
+        .catch(err => {
+          dispatch('ERROR_HANDLER', err)
+        })
+    },
+    UPDATE_TODO({ commit, dispatch }, todo) {
+      fb.db
+        .collection('todo')
+        .doc(todo.id)
+        .set(
+          {
+            content: todo.content,
+            completed: todo.completed
+          },
+          { merge: true }
+        )
+        .then(() => {
+          commit('UPDATE_TODO', todo)
+        })
         .catch(err => {
           dispatch('ERROR_HANDLER', err)
         })

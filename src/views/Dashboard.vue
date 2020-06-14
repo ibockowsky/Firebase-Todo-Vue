@@ -5,7 +5,7 @@
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div v-if="todos.length <= 0">No todos.</div>
           <transition-group name="slide" appear>
-            <Todo v-for="todo in todos" :key="todo.id" :todo="todo" />
+            <Todo v-for="todo in todos" :key="todo.id" :todo_data="todo" />
           </transition-group>
 
           <div
