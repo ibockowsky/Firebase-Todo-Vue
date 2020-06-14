@@ -88,7 +88,7 @@ export const store = new Vuex.Store({
           router.push('/')
         })
         .catch(err => {
-          console.log(err)
+          dispatch('ERROR_HANDLER', err)
         })
     },
     ADD_TODO({ commit, state, dispatch }, todo) {
