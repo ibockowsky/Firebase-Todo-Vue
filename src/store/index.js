@@ -14,7 +14,7 @@ fb.auth.onAuthStateChanged(user => {
 export const store = new Vuex.Store({
   state: {
     currentUser: null,
-    errorMessages: [],
+    errorMessage: '',
     todos: []
   },
   mutations: {
@@ -25,20 +25,13 @@ export const store = new Vuex.Store({
       state.currentUser = null
     },
     ADD_ERROR(state, error) {
-      if (state.errorMessages.includes(error.message)) {
-        state.errorMessages = state.errorMessages.filter(
-          el => el !== error.message
-        )
-      }
-      state.errorMessages.push(error.message)
-    },
-    CLEAR_ERRORS(state) {
-      state.errorMessages = []
+      state.errorMessage = error.message
     },
     ADD_TODO(state, todo) {
       state.todos.push(todo)
     },
     SET_TODOS(state, todos) {
+      console.log(todos)
       state.todos = todos
     },
     DELETE_TODO(state, id) {
