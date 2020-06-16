@@ -3,7 +3,7 @@
     <div class="flex justify-center">
       <router-link
         v-if="!currentUser"
-        to="/"
+        to="/login"
         class="no-underline text-grey-600 border-b-2 border-transparent uppercase tracking-wide font-bold text-xs py-3 mr-8"
       >
         Login
@@ -17,7 +17,7 @@
       </router-link>
       <router-link
         v-if="!!currentUser"
-        to="/dashboard"
+        to="/"
         class="no-underline text-grey-600 border-b-2 border-transparent uppercase tracking-wide font-bold text-xs py-3 mr-8"
       >
         Todo List

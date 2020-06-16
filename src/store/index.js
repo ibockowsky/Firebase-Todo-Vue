@@ -55,7 +55,7 @@ export const store = new Vuex.Store({
         .createUserWithEmailAndPassword(credentials.email, credentials.password)
         .then(user => {
           commit('SET_USER', user)
-          router.push('/dashboard')
+          router.push('/')
         })
         .catch(err => {
           dispatch('ERROR_HANDLER', err)
@@ -66,7 +66,7 @@ export const store = new Vuex.Store({
         .signInWithEmailAndPassword(credentials.email, credentials.password)
         .then(user => {
           commit('SET_USER', user)
-          router.push('/dashboard')
+          router.push('/')
         })
         .catch(err => {
           dispatch('ERROR_HANDLER', err)
@@ -77,7 +77,7 @@ export const store = new Vuex.Store({
         .signOut()
         .then(() => {
           commit('CLEAR_DATA')
-          router.push('/')
+          router.push('/login')
         })
         .catch(err => {
           dispatch('ERROR_HANDLER', err)

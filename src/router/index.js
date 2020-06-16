@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import { store } from '@/store/index.js'
 import firebase from 'firebase'
 
-import Home from '@/views/Home.vue'
+import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
 import Dashboard from '@/views/Dashboard.vue'
 
@@ -11,9 +11,9 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: '/login',
+    name: 'Login',
+    component: Login
   },
   {
     path: '/register',
@@ -21,7 +21,7 @@ const routes = [
     component: Register
   },
   {
-    path: '/dashboard',
+    path: '/',
     name: 'Dashboard',
     component: Dashboard,
     meta: {
@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
   store.commit('ADD_ERROR', '')
 
   if (requiresAuth && !currentUser) {
-    next('/')
+    next('/login')
   } else if (requiresAuth && currentUser) {
     next()
   } else {
