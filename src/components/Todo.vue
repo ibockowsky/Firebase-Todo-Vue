@@ -63,6 +63,9 @@ export default {
     },
     editTodo() {
       this.beforeEdit = this.content
+      if (this.todo.completed) {
+        return
+      }
       this.editing = true
     },
     editDoneTodo() {

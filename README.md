@@ -2,7 +2,12 @@
 ## Preview
 See it [here](https://todo-fd9db.web.app)!
 
-## .env (Create it and paste there your firebase config data)
+## Install steps
+Clone it and run
+```
+npm install
+```
+Then create .env and paste there your firebase config data
 ```
 VUE_APP_apiKey=
 VUE_APP_authDomain=
@@ -13,8 +18,9 @@ VUE_APP_messagingSenderId=
 VUE_APP_appId=
 VUE_APP_measurementId=
 ```
-
+Create auth by e-mail and firestore with documente called 'todo' in your Firebase Console
 ## Firestore rules
+You can consider rules I made for it
 ```
 rules_version = '2';
 service cloud.firestore {
@@ -35,26 +41,7 @@ service cloud.firestore {
   }
 }
 ```
-
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
+Now you're able to run it!
 ```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

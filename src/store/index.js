@@ -31,7 +31,6 @@ export const store = new Vuex.Store({
       state.todos.push(todo)
     },
     SET_TODOS(state, todos) {
-      console.log(todos)
       state.todos = todos
     },
     DELETE_TODO(state, id) {
@@ -160,6 +159,17 @@ export const store = new Vuex.Store({
     },
     ERROR_HANDLER({ commit }, error) {
       commit('ADD_ERROR', error)
+    }
+  },
+  getters: {
+    allTodos(state) {
+      return state.todos
+    },
+    completedTodos(state) {
+      return state.todos.filter(todo => todo.completed === true)
+    },
+    notCompletedTodos(state) {
+      return state.todos.filter(todo => todo.completed === false)
     }
   },
   modules: {}
