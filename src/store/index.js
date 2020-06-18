@@ -154,7 +154,7 @@ export const store = new Vuex.Store({
           {
             content: todo.content,
             completed: todo.completed,
-            text: todo.text
+            text: !!todo.text ? todo.text : 'No text.'
           },
           { merge: true }
         )
