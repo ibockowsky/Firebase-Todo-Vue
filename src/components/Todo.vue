@@ -100,6 +100,7 @@ export default {
       let toUpdate = {
         id: this.id,
         content: this.content,
+        created_at: this.created_at,
         text: this.text,
         completed: this.completed
       }
