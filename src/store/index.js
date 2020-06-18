@@ -47,6 +47,9 @@ export const store = new Vuex.Store({
         created_at: todo.created_at,
         completed: todo.completed
       })
+    },
+    SET_COMPLETED(state, isChecked) {
+      state.todos.forEach(todo => (todo.completed = isChecked))
     }
   },
   actions: {
@@ -90,6 +93,7 @@ export const store = new Vuex.Store({
         .add({
           content: todo,
           created_at: new Date(),
+          text: 'No text',
           completed: false,
           uid: uid
         })
@@ -97,6 +101,8 @@ export const store = new Vuex.Store({
           commit('ADD_TODO', {
             id: docRef.id,
             content: todo,
+            text: 'No text',
+            created_at: new Date(),
             completed: false
           })
         })
@@ -116,6 +122,7 @@ export const store = new Vuex.Store({
             tempArray.push({
               id: doc.id,
               content: doc.data().content,
+              text: doc.data().text,
               created_at: doc.data().created_at,
               completed: doc.data().completed
             })
@@ -129,12 +136,12 @@ export const store = new Vuex.Store({
           dispatch('ERROR_HANDLER', err)
         })
     },
-    DELETE_TODO({ commit, dispatch }, todo) {
+    DELETE_TODO({ commit, dispatch }, id) {
       fb.db
         .collection('todo')
-        .doc(todo.id)
+        .doc(id)
         .delete()
-        .then(() => commit('DELETE_TODO', todo.id))
+        .then(() => commit('DELETE_TODO', id))
         .catch(err => {
           dispatch('ERROR_HANDLER', err)
         })
@@ -146,7 +153,8 @@ export const store = new Vuex.Store({
         .set(
           {
             content: todo.content,
-            completed: todo.completed
+            completed: todo.completed,
+            text: todo.text
           },
           { merge: true }
         )
@@ -157,19 +165,43 @@ export const store = new Vuex.Store({
           dispatch('ERROR_HANDLER', err)
         })
     },
+    SET_COMPLETED({ commit, state }, isChecked) {
+      const uid = state.currentUser.uid
+      fb.db
+        .collection('todo')
+        .where('uid', '==', uid)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            doc.ref
+              .update({
+                completed: isChecked
+              })
+              .then(() => {
+                commit('SET_COMPLETED', isChecked)
+              })
+          })
+        })
+    },
     ERROR_HANDLER({ commit }, error) {
       commit('ADD_ERROR', error)
     }
   },
   getters: {
-    allTodos(state) {
-      return state.todos
-    },
     completedTodos(state) {
       return state.todos.filter(todo => todo.completed === true)
     },
     notCompletedTodos(state) {
       return state.todos.filter(todo => todo.completed === false)
+    },
+    toGoTodos(state) {
+      return state.todos.filter(todo => !todo.completed).length
+    },
+    anyToGoTodos(state, getters) {
+      return getters.toGoTodos != 0
+    },
+    getTodo: state => id => {
+      return state.todos.filter(todo => todo.id === id)
     }
   },
   modules: {}

@@ -14,22 +14,32 @@
               </button>
             </li>
           </ul>
+          <div>
+            <div v-if="showModal"><router-view /></div>
+          </div>
           <transition-group name="slide" appear>
             <template v-if="currentTab == 'all'">
-              <Todo v-for="todo in allTodos" :key="todo.id" :todo_data="todo" />
+              <Todo
+                v-for="todo in todos"
+                :key="todo.id"
+                :todo="todo"
+                :checkAllTodos="!anyToGoTodos"
+              />
             </template>
             <template v-if="currentTab == 'completed'">
               <Todo
                 v-for="todo in completedTodos"
                 :key="todo.id"
-                :todo_data="todo"
+                :todo="todo"
+                :checkAllTodos="!anyToGoTodos"
               />
             </template>
             <template v-if="currentTab == 'not completed'">
               <Todo
                 v-for="todo in notCompletedTodos"
                 :key="todo.id"
-                :todo_data="todo"
+                :todo="todo"
+                :checkAllTodos="!anyToGoTodos"
               />
             </template>
           </transition-group>
@@ -52,6 +62,16 @@
               Add
             </button>
           </div>
+          <div class="float-right inline-flex ">
+            <input
+              id="checkAllCheckox"
+              type="checkbox"
+              :checked="toGoTodos === 0"
+              @change="checkAllTodos"
+              class="m-1 p-1"
+            />
+            <label for="checkAllCheckbox">Check all!</label>
+          </div>
         </div>
       </div>
     </div>
@@ -59,11 +79,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import Todo from '@/components/Todo.vue'
 export default {
   computed: {
-    ...mapGetters(['allTodos', 'completedTodos', 'notCompletedTodos'])
+    ...mapState(['todos']),
+    ...mapGetters([
+      'completedTodos',
+      'notCompletedTodos',
+      'toGoTodos',
+      'anyToGoTodos'
+    ])
   },
   components: {
     Todo
@@ -72,7 +98,13 @@ export default {
     return {
       todo: '',
       tabs: ['all', 'completed', 'not completed'],
-      currentTab: 'all'
+      currentTab: 'all',
+      showModal: false
+    }
+  },
+  watch: {
+    $route(newVal, oldVal) {
+      this.showModal = newVal.meta && newVal.meta.showModal
     }
   },
   created() {
@@ -85,6 +117,9 @@ export default {
     },
     changeTab(tab) {
       this.currentTab = tab
+    },
+    checkAllTodos() {
+      this.$store.dispatch('SET_COMPLETED', event.target.checked)
     }
   }
 }

@@ -6,6 +6,7 @@ import firebase from 'firebase'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
 import Dashboard from '@/views/Dashboard.vue'
+import TodoModal from '@/components/TodoModal.vue'
 
 Vue.use(VueRouter)
 
@@ -26,7 +27,17 @@ const routes = [
     component: Dashboard,
     meta: {
       requiresAuth: true
-    }
+    },
+    children: [
+      {
+        path: ':todoId',
+        component: TodoModal,
+        props: true,
+        meta: {
+          showModal: true
+        }
+      }
+    ]
   }
 ]
 
