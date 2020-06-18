@@ -41,9 +41,14 @@
               {{ todo.content }}
             </h3>
             <div class="mt-2">
-              <p class="text-sm leading-5 text-gray-500">
+              <p
+                v-if="!isEditing"
+                @dblclick="editText"
+                class="text-sm leading-5 text-gray-500"
+              >
                 {{ todo.text }}
               </p>
+              <input type="text" v-model="todo.text" v-else />
             </div>
           </div>
         </div>
@@ -81,12 +86,16 @@ export default {
   },
   data() {
     return {
-      todo: this.$store.getters.getTodo(this.todoId)[0]
+      todo: this.$store.getters.getTodo(this.todoId)[0],
+      isEditing: false
     }
   },
   methods: {
     closeModal() {
       this.$router.push('/')
+    },
+    editText() {
+      this.isEditing = true
     }
   }
 }

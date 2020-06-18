@@ -65,6 +65,7 @@ export default {
       id: this.todo.id,
       content: this.todo.content,
       completed: this.todo.completed,
+      text: this.todo.text,
       created_at:
         this.todo.created_at instanceof Date
           ? this.todo.created_at
@@ -99,6 +100,7 @@ export default {
       let toUpdate = {
         id: this.id,
         content: this.content,
+        text: this.text,
         completed: this.completed
       }
       this.$store.dispatch('UPDATE_TODO', toUpdate)
