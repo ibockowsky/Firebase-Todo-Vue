@@ -1,7 +1,6 @@
 <template>
   <div
     class="fixed bottom-0 inset-x-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center"
-    @keyup.esc="closeModal"
     tabindex="0"
   >
     <div class="fixed inset-0 transition-opacity">
@@ -41,14 +40,21 @@
               {{ todo.content }}
             </h3>
             <div class="mt-2">
-              <p
+              <span
                 v-if="!isEditing"
                 @dblclick="editText"
                 class="text-sm leading-5 text-gray-500"
               >
                 {{ todo.text }}
-              </p>
-              <input type="text" v-model="todo.text" v-else />
+              </span>
+              <input
+                type="text"
+                v-model="todo.text"
+                class="font-sans subpixel-antialiased text-sm border-b border-b-2 border-teal-500"
+                @keyup.esc="exitEditText"
+                @keyup.enter="doneEditText"
+                v-else
+              />
             </div>
           </div>
         </div>
@@ -81,12 +87,12 @@ export default {
   },
   watch: {
     todoId() {
-      this.todo = this.$store.getters.getTodo(this.todoId)[0]
+      this.todo = this.$store.getters.getTodo(this.todoId)
     }
   },
   data() {
     return {
-      todo: this.$store.getters.getTodo(this.todoId)[0],
+      todo: this.$store.getters.getTodo(this.todoId),
       isEditing: false
     }
   },
@@ -95,7 +101,26 @@ export default {
       this.$router.push('/')
     },
     editText() {
+      this.beforeEdit = this.todo.text
       this.isEditing = true
+    },
+    doneEditText() {
+      if (this.todo.text.trim() == '') {
+        this.todo.text = this.beforeEdit
+      }
+      let toUpdate = {
+        id: this.todo.id,
+        content: this.todo.content,
+        created_at: this.todo.created_at,
+        text: this.todo.text,
+        completed: this.todo.completed
+      }
+      this.$store.dispatch('UPDATE_TODO', toUpdate)
+      this.isEditing = false
+    },
+    exitEditText() {
+      this.todo.text = this.beforeEdit
+      this.isEditing = false
     }
   }
 }

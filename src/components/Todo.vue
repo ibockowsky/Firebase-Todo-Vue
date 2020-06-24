@@ -94,7 +94,7 @@ export default {
       this.editing = true
     },
     editDoneTodo() {
-      if (this.content.trim == '') {
+      if (this.content.trim() == '') {
         this.content = this.beforeEdit
       }
       let toUpdate = {

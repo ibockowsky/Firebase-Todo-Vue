@@ -201,7 +201,7 @@ export const store = new Vuex.Store({
       return getters.toGoTodos != 0
     },
     getTodo: state => id => {
-      return state.todos.filter(todo => todo.id === id)
+      return state.todos.filter(todo => todo.id === id)[0]
     }
   },
   modules: {}
