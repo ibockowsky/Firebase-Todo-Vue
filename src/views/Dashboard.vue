@@ -73,6 +73,9 @@
             <label for="checkAllCheckbox">Check all!</label>
           </div>
         </div>
+        <div class="m-5" v-if="isTodoHistory">
+          <TodoHistory :todos="todosHistory" />
+        </div>
       </div>
     </div>
   </div>
@@ -81,18 +84,21 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import Todo from '@/components/Todo.vue'
+import TodoHistory from '@/components/TodoHistory.vue'
 export default {
   computed: {
-    ...mapState(['todos']),
+    ...mapState(['todos', 'todosHistory']),
     ...mapGetters([
       'completedTodos',
       'notCompletedTodos',
       'toGoTodos',
-      'anyToGoTodos'
+      'anyToGoTodos',
+      'isTodoHistory'
     ])
   },
   components: {
-    Todo
+    Todo,
+    TodoHistory
   },
   data() {
     return {
@@ -109,6 +115,7 @@ export default {
   },
   created() {
     this.$store.dispatch('GET_TODOS')
+    this.$store.dispatch('GET_TODOS_HISTORY')
   },
   methods: {
     add() {

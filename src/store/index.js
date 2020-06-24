@@ -15,7 +15,8 @@ export const store = new Vuex.Store({
   state: {
     currentUser: null,
     errorMessage: '',
-    todos: []
+    todos: [],
+    todosHistory: []
   },
   mutations: {
     SET_USER(state, user) {
@@ -50,6 +51,12 @@ export const store = new Vuex.Store({
     },
     SET_COMPLETED(state, isChecked) {
       state.todos.forEach(todo => (todo.completed = isChecked))
+    },
+    SET_TODOS_HISTORY(state, todos) {
+      state.todosHistory = todos
+    },
+    ADD_TODO_HISTORY(state, todo) {
+      state.todosHistory.push(todo)
     }
   },
   actions: {
@@ -136,12 +143,60 @@ export const store = new Vuex.Store({
           dispatch('ERROR_HANDLER', err)
         })
     },
-    DELETE_TODO({ commit, dispatch }, id) {
+    GET_TODOS_HISTORY({ commit, dispatch, state }) {
+      const uid = state.currentUser.uid
+      fb.db
+        .collection('todoHistory')
+        .where('uid', '==', uid)
+        .get()
+        .then(querySnapshot => {
+          let tempArray = []
+          querySnapshot.forEach(doc => {
+            tempArray.push({
+              id: doc.id,
+              content: doc.data().content,
+              deleted_at: doc.data().deleted_at
+            })
+          })
+          const arraySorted = tempArray.sort((a, b) => {
+            return a.deleted_at.seconds - b.deleted_at.seconds
+          })
+          commit('SET_TODOS_HISTORY', arraySorted)
+        })
+        .catch(err => {
+          dispatch('ERROR_HANDLER', err)
+        })
+    },
+    DELETE_TODO({ commit, dispatch, getters, state }, id) {
+      const uid = state.currentUser.uid
+      const todo = getters.getTodo(id)
       fb.db
         .collection('todo')
         .doc(id)
         .delete()
-        .then(() => commit('DELETE_TODO', id))
+        .then(() => {
+          fb.db
+            .collection('todoHistory')
+            .add({
+              content: todo.content,
+              text: todo.text,
+              deleted_at: new Date(),
+              uid: uid
+            })
+            .then(docRef => {
+              commit('ADD_TODO_HISTORY', {
+                id: docRef.id,
+                content: todo.content,
+                text: 'No text',
+                deleted_at: new Date(),
+                completed: false
+              })
+            })
+            .catch(err => {
+              dispatch('ERROR_HANDLER', err)
+            })
+          commit('DELETE_TODO', id)
+        })
         .catch(err => {
           dispatch('ERROR_HANDLER', err)
         })
@@ -202,6 +257,9 @@ export const store = new Vuex.Store({
     },
     getTodo: state => id => {
       return state.todos.filter(todo => todo.id === id)[0]
+    },
+    isTodoHistory(state) {
+      return state.todosHistory.length > 0
     }
   },
   modules: {}
