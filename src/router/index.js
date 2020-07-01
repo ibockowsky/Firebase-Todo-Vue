@@ -14,12 +14,18 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
+    meta: {
+      disabledForLogged: true
+    }
   },
   {
     path: '/register',
     name: 'Register',
-    component: Register
+    component: Register,
+    meta: {
+      disabledForLogged: true
+    }
   },
   {
     path: '/',
@@ -48,14 +54,16 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
+  const disabledForLogged = to.matched.some(x => x.meta.disabledForLogged)
   const currentUser = firebase.auth().currentUser
 
   store.commit('alerts/ADD_ERROR', '')
-
   if (requiresAuth && !currentUser) {
     next('/login')
   } else if (requiresAuth && currentUser) {
     next()
+  } else if (disabledForLogged && currentUser) {
+    next('/')
   } else {
     next()
   }
