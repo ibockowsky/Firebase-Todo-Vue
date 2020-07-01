@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     deleteTodo() {
-      this.$store.dispatch('DELETE_TODO', this.id)
+      this.$store.dispatch('todos/deleteTodo', this.id)
     },
     editTodo() {
       this.beforeEdit = this.content
@@ -104,7 +104,7 @@ export default {
         text: this.text,
         completed: this.completed
       }
-      this.$store.dispatch('UPDATE_TODO', toUpdate)
+      this.$store.dispatch('todos/updateTodo', toUpdate)
       this.editing = false
     },
     editExitTodo() {

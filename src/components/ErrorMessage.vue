@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     clearErrors() {
-      this.$store.commit('ADD_ERROR', '')
+      this.$store.commit('alerts/ADD_ERROR', '')
     }
   }
 }

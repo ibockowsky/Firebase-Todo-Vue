@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     login() {
-      this.$store.dispatch('LOGIN', this.form)
+      this.$store.dispatch('users/loginUser', this.form)
     }
   }
 }
