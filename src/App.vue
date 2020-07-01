@@ -27,7 +27,7 @@ export default {
     ErrorMessage
   },
   computed: {
-    ...mapState(['errorMessage'])
+    ...mapState('alerts', ['errorMessage'])
   }
 }
 </script>

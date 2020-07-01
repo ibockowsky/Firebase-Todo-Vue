@@ -50,7 +50,7 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
   const currentUser = firebase.auth().currentUser
 
-  store.commit('ADD_ERROR', '')
+  store.commit('alerts/ADD_ERROR', '')
 
   if (requiresAuth && !currentUser) {
     next('/login')

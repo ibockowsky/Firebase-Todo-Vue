@@ -87,14 +87,15 @@ import Todo from '@/components/Todo.vue'
 import TodoHistory from '@/components/TodoHistory.vue'
 export default {
   computed: {
-    ...mapState(['todos', 'todosHistory']),
-    ...mapGetters([
+    ...mapState('todos', ['todos']),
+    ...mapState('todosHistory', ['todosHistory']),
+    ...mapGetters('todos', [
       'completedTodos',
       'notCompletedTodos',
       'toGoTodos',
-      'anyToGoTodos',
-      'isTodoHistory'
-    ])
+      'anyToGoTodos'
+    ]),
+    ...mapGetters('todosHistory', ['isTodoHistory'])
   },
   components: {
     Todo,
@@ -114,19 +115,19 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('GET_TODOS')
-    this.$store.dispatch('GET_TODOS_HISTORY')
+    this.$store.dispatch('todos/getTodos')
+    this.$store.dispatch('todosHistory/getTodosHistory')
   },
   methods: {
     add() {
-      this.$store.dispatch('ADD_TODO', this.todo)
+      this.$store.dispatch('todos/addTodo', this.todo)
       this.todo = ''
     },
     changeTab(tab) {
       this.currentTab = tab
     },
     checkAllTodos() {
-      this.$store.dispatch('SET_COMPLETED', event.target.checked)
+      this.$store.dispatch('todos/setTodosCompleted', event.target.checked)
     }
   }
 }
