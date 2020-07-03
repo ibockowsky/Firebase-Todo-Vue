@@ -82,7 +82,7 @@ const actions = {
         dispatch('alerts/addError', err, { root: true })
       })
   },
-  deleteTodo({ commit, dispatch, rootGetters }, id) {
+  deleteTodo({ commit, dispatch, rootGetters, getters }, id) {
     const uid = rootGetters['users/getUserId']
     const todo = getters['getTodo'](id)
     fb.db
@@ -99,13 +99,17 @@ const actions = {
             uid: uid
           })
           .then(docRef => {
-            commit('ADD_TODO_HISTORY', {
-              id: docRef.id,
-              content: todo.content,
-              text: 'No text',
-              deleted_at: new Date(),
-              completed: false
-            })
+            commit(
+              'todosHistory/ADD_TODO_HISTORY',
+              {
+                id: docRef.id,
+                content: todo.content,
+                text: 'No text',
+                deleted_at: new Date(),
+                completed: false
+              },
+              { root: true }
+            )
           })
           .catch(err => {
             dispatch('alerts/addError', err, { root: true })

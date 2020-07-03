@@ -4,6 +4,8 @@ import router from './router'
 import { store } from './store'
 import '@/assets/css/tailwind.css'
 import moment from 'moment'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
 const fb = require('@/services/firebase.js')
 
 Vue.config.productionTip = false
@@ -13,6 +15,8 @@ Vue.filter('formatDate', value => {
     return moment(value, 'DD.MM.YYYY hh:mm:ss').format('DD.MM.YYYY @ HH:mm:ss')
   }
 })
+
+Vue.component('loading', Loading)
 
 let app
 fb.auth.onAuthStateChanged(user => {

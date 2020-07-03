@@ -26,6 +26,11 @@ export default {
     NavBar,
     ErrorMessage
   },
+  data() {
+    return {
+      isLoading: true
+    }
+  },
   computed: {
     ...mapState('alerts', ['errorMessage'])
   }

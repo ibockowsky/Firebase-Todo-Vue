@@ -2,7 +2,7 @@
   <div>
     <div class="home container mx-auto">
       <div class="xs:w-full md:w-full lg:w-1/2 xl:w-1/2 mx-auto">
-        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-5 mb-4">
           <ul class="flex m-2">
             <li v-for="tab in tabs" :key="tab" class="flex-1 mr-2">
               <button
@@ -43,7 +43,6 @@
               />
             </template>
           </transition-group>
-
           <div
             class="flex items-center border-b border-b-2 border-teal-500 py-2"
           >
@@ -62,19 +61,29 @@
               Add
             </button>
           </div>
-          <div class="float-right inline-flex ">
-            <input
-              id="checkAllCheckox"
-              type="checkbox"
-              :checked="toGoTodos === 0"
-              @change="checkAllTodos"
-              class="m-1 p-1"
-            />
-            <label for="checkAllCheckbox">Check all!</label>
+          <div class="flex flex-row-reverse pt-3">
+            <div class="">
+              <div class="">
+                <input
+                  id="checkAllCheckox"
+                  type="checkbox"
+                  :checked="toGoTodos === 0"
+                  @change="checkAllTodos"
+                  class="m-1 p-1"
+                />
+                <label for="checkAllCheckbox">Check all!</label>
+              </div>
+              <div
+                v-if="todosHistory.length > 0"
+                @click.prevent="clearTodosHistory"
+              >
+                Clear history
+              </div>
+            </div>
           </div>
         </div>
-        <div class="m-5" v-if="isTodoHistory">
-          <TodoHistory :todos="todosHistory" />
+        <div class="m-5">
+          <TodoHistory :todos="todosHistory" :loadingSpinner="isLoading" />
         </div>
       </div>
     </div>
@@ -88,7 +97,7 @@ import TodoHistory from '@/components/TodoHistory.vue'
 export default {
   computed: {
     ...mapState('todos', ['todos']),
-    ...mapState('todosHistory', ['todosHistory']),
+    ...mapState('todosHistory', ['todosHistory', 'isLoading']),
     ...mapGetters('todos', [
       'completedTodos',
       'notCompletedTodos',
@@ -128,6 +137,9 @@ export default {
     },
     checkAllTodos() {
       this.$store.dispatch('todos/setTodosCompleted', event.target.checked)
+    },
+    clearTodosHistory() {
+      this.$store.dispatch('todosHistory/removeTodosHistory')
     }
   }
 }
