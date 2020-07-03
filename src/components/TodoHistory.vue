@@ -1,10 +1,10 @@
 <template>
-  <div class="bg-gray-100 shadow-md rounded  p-2 w-1/2 mx-auto">
+  <div class="bg-gray-100 shadow-md rounded  p-2 w-3/4 md:w-1/2 mx-auto">
     <div class="overflow-auto max-h-64 py-1">
       <template>
         <div class="flex justify-between text-sm text-gray-500 px-3">
-          <div>Title</div>
-          <div>Deleted at</div>
+          <div class="max-w-1/2">Title</div>
+          <div class="max-w-1/2">Deleted at</div>
         </div>
         <loading
           class="vld-parent"
@@ -15,10 +15,12 @@
           <div
             v-for="todo in todos"
             :key="todo.id"
-            class="flex justify-between text-sm text-gray-500 px-3"
+            class="flex justify-between text-sm text-gray-500 px-3 break-words"
           >
-            <div>{{ todo.content }}</div>
-            <div>
+            <div class="max-w-1/2 text-left">
+              {{ todo.content }}
+            </div>
+            <div class="max-w-1/2 text-right">
               {{
                 todo.deleted_at instanceof Date
                   ? todo.deleted_at

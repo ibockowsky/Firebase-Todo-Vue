@@ -3,7 +3,7 @@
     <div class="home container mx-auto">
       <div class="xs:w-full md:w-full lg:w-1/2 xl:w-1/2 mx-auto">
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-5 mb-4">
-          <ul class="flex m-2">
+          <ul class="flex flex-col md:flex-row  lg:flex-row xl:flex-row m-2">
             <li v-for="tab in tabs" :key="tab" class="flex-1 mr-2">
               <button
                 class="text-center capitalize block border border-white rounded hover:border-gray-200 text-teal-500 hover:bg-gray-200 py-2 px-4 w-full"
