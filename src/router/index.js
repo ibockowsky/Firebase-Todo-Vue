@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { store } from '@/store/index.js'
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'

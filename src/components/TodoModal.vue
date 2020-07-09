@@ -85,6 +85,13 @@ export default {
       required: true
     }
   },
+  beforeRouteEnter(to, from, next) {
+    if (!from.name) {
+      next('/')
+    } else {
+      next()
+    }
+  },
   watch: {
     todoId() {
       this.todo = this.$store.getters['todos/getTodo'](this.todoId)
@@ -115,7 +122,6 @@ export default {
         text: this.todo.text,
         completed: this.todo.completed
       }
-      console.log(toUpdate)
       this.$store.dispatch('todos/updateTodo', toUpdate)
       this.isEditing = false
     },
