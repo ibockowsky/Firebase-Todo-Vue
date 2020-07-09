@@ -71,7 +71,7 @@
                   @change="checkAllTodos"
                   class="m-1 p-1"
                 />
-                <label for="checkAllCheckbox">Check all!</label>
+                <label for="checkAllCheckbox">Mark as done!</label>
               </div>
               <div
                 v-if="todosHistory.length > 0"

@@ -23,6 +23,7 @@ const mutations = {
     state.todos.splice(index, 1, {
       id: todo.id,
       content: todo.content,
+      text: todo.text,
       created_at: todo.created_at,
       completed: todo.completed
     })

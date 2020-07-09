@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     register() {
-      this.$store.dispatch('REGISTER', this.form)
+      this.$store.dispatch('users/registerUser', this.form)
     }
   }
 }

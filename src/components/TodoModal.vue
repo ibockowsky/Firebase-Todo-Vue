@@ -87,12 +87,12 @@ export default {
   },
   watch: {
     todoId() {
-      this.todo = this.$store.getters.todos.getTodo(this.todoId)
+      this.todo = this.$store.getters['todos/getTodo'](this.todoId)
     }
   },
   data() {
     return {
-      todo: this.$store.getters.todos.getTodo(this.todoId),
+      todo: this.$store.getters['todos/getTodo'](this.todoId),
       isEditing: false
     }
   },
@@ -115,6 +115,7 @@ export default {
         text: this.todo.text,
         completed: this.todo.completed
       }
+      console.log(toUpdate)
       this.$store.dispatch('todos/updateTodo', toUpdate)
       this.isEditing = false
     },
